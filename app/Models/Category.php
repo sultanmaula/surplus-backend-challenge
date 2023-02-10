@@ -15,4 +15,9 @@ class Category extends Model
         'name',
         'enable',
     ];
+
+    public function product()
+    {
+        return $this->hasMany('App\Models\CategoryProduct', 'category_id', 'id');
+    }
 }

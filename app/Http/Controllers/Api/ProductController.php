@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\CategoryProduct;
+use App\Models\Image as ModelsImage;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Image;
 
 class ProductController extends Controller
 {
@@ -18,7 +22,7 @@ class ProductController extends Controller
     public function index()
     {
         try {
-            $product = Product::where('enable', 1)->get();
+            $product = Product::with('category', 'image')->where('enable', 1)->get();
 
             return response()->json([
                 'code' => 200,
@@ -63,9 +67,46 @@ class ProductController extends Controller
                 'enable' => 'required|boolean',
             ]);
 
-            $data = $request->all();
+            $product = Product::with('category', 'image')->create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'enable' => $request->enable,
+            ]);
 
-            $product = Product::create($data);
+            // save product category
+            if ($categories = $request->category_id) {
+                foreach ($categories as $category) {
+                    CategoryProduct::create([
+                        'product_id' => $product->id,
+                        'category_id' => $category,
+                    ]);
+                }
+            }
+
+            // save product image
+            $images = $request->file('image');
+            if ($request->hasFile('image')) {
+                foreach ($images as $image) {
+                    $destination_path = public_path('uploads');
+                    $name = date('YmdHis').rand(10,1000).'.'.$image->getClientOriginalExtension();
+
+                    $img = Image::make($image->getRealPath());
+                    $img->resize(600, 600, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($destination_path.'/'.$name);
+
+                    $image_save = ModelsImage::create([
+                        'name' => $name,
+                        'file' => url('/uploads').'/'.$name,
+                        'enable' => $request->enable,
+                    ]);
+
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image_id' => $image_save->id,
+                    ]);
+                }
+            }
 
             return response()->json([
                 'code' => 200,
@@ -89,7 +130,7 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
-            $product = Product::findOrFail($id);
+            $product = Product::with('category', 'image')->findOrFail($id);
 
             return response()->json([
                 'code' => 200,
@@ -136,10 +177,55 @@ class ProductController extends Controller
                 'enable' => 'required|boolean',
             ]);
 
-            $data = $request->all();
+            $product = Product::with('category', 'image')->findOrFail($id);
+            $product->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'enable' => $request->enable,
+            ]);
 
-            $product = Product::findOrFail($id);
-            $product->update($data);
+            // update product category
+            if ($categories = $request->category_id) {
+                foreach ($categories as $category) {
+                    CategoryProduct::updateOrCreate(
+                        [
+                            'product_id' => $id,
+                        ],
+                        [
+                            'category_id' => $category,
+                        ]
+                    );
+                }
+            }
+
+            // update product image
+            $images = $request->file('image');
+            if ($request->hasFile('image')) {
+                foreach ($images as $image) {
+                    $destination_path = public_path('uploads');
+                    $name = date('YmdHis').rand(10,1000).'.'.$image->getClientOriginalExtension();
+
+                    $img = Image::make($image->getRealPath());
+                    $img->resize(600, 600, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($destination_path.'/'.$name);
+
+                    $image_save = ModelsImage::create([
+                        'name' => $name,
+                        'file' => url('/uploads').'/'.$name,
+                        'enable' => $request->enable,
+                    ]);
+
+                    ProductImage::updateOrCreate(
+                        [
+                            'product_id' => $id,
+                        ],
+                        [
+                            'image_id' => $image_save->id,
+                        ]
+                    );
+                }
+            }
 
             return response()->json([
                 'code' => 200,
@@ -170,6 +256,14 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($id);
             $product->delete();
+
+            if ($category = CategoryProduct::where('product_id', $id)->get()) {
+                CategoryProduct::where('product_id', $id)->delete();
+            }
+
+            if ($image = ProductImage::where('product_id', $id)->get()) {
+                ProductImage::where('product_id', $id)->delete();
+            }
 
             return response()->json([
                 'code' => 200,
