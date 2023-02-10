@@ -1,64 +1,55 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## Surplus Backend Challenge
+### 1. Description
+Surplus backend challenge is a challenge to build an application that has a REST API concept on the backend side to meet the needs of the product management system.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### 2. Requirements
+- PHP 7.4
+- Laravel 8.75
+- MySQL Database
 
-## About Laravel
+### 3. How to Install
+- Run ``` git clone https://github.com/sultanmaula/surplus-backend-challenge.git``` to clone this repository to your local
+- Run ``` composer install ```
+- Run ``` cp .env.example .env ```
+- Change .env configuration with your database settings
+- Run ``` php artisan migrate ``` to migrate the database
+- Run ``` php artisan key:generate ``` to generate the keys
+- Run ``` php artisan serve ``` to start the application
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 4. Documentation
+- Category
+    - List Category [GET] : ``` {{base_url}}api/category ```
+    - Add Category [POST] : ``` {{base_url}}api/category ```
+    - Detail Category [GET] : ``` {{base_url}}api/category/{category_id} ```
+    - Delete Category [DELETE] : ``` {{base_url}}api/category/{category_id} ```
+        - BODY :
+            - name => required & string => ex : Gadget
+            - enable => required & boolean => ex : 1
+    - Update Category [POST] : ``` {{base_url}}api/category/{category_id}?_method=PATCH ```
+        - BODY :
+            - name => required & string => ex : Gadget
+            - enable => required & boolean => ex : 1
+    
+- Product
+    - List Product [GET] : ``` {{base_url}}api/product ```
+    - Detail Product [GET] : ``` {{base_url}}api/product/{product_id} ```
+    - Delete Product [DELETE] : ``` {{base_url}}api/product/{product_id} ```
+    - Add Product [POST] : ``` {{base_url}}api/product ```
+        - BODY :
+            - name => required & string => ex : Smartphone Android
+            - description => required & string => ex : This is desc of smartphone
+            - enable => required & boolean => ex : 1
+            - category_id[] => integer (can multiple) => ex : 1 [ID of Gadget]
+            - image[] => file (can multiple) => ex : Choose/upload files
+    - Update Product [POST] : ``` {{base_url}}api/product/{product_id}?_method=PATCH ```
+        - BODY :
+            - name => required & string => ex : Smartphone Android
+            - description => required & string => ex : This is desc of smartphone
+            - enable => required & boolean => ex : 1
+            - category_id[] => integer (can multiple) => ex : 1 [ID of Gadget]
+            - image[] => file (can multiple) => ex : Choose/upload files
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 5. Contact
+- Email : <a href="mailto:sultanmaulachamzah@gmail.com">sultanmaulachamzah@gmail.com</a>
+- WhatsApp : <a href="https://wa.me/6285231731037">+62 85231731037</a>
+- Website : <a href="https://sultanmaula.com">sultanmaula.com</a>
