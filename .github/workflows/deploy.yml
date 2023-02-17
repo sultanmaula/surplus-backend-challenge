@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Deployment
-        uses: sultanmaula/ssh-action@main
+        uses: surplus-backend-challenge/ssh-action@main
         with:
           host: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
