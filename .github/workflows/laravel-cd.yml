@@ -17,6 +17,7 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /apps/surplus-backend-challenge
+          cd /var/www/surplus-backend-challenge/
           git pull origin main
           git status
+          php artisan migrate --seed
