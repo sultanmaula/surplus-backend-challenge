@@ -20,4 +20,3 @@ jobs:
           cd /apps/surplus-backend-challenge
           git pull origin main
           git status
-          php artisan migrate --seed
