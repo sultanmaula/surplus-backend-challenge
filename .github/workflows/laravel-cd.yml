@@ -21,4 +21,3 @@ jobs:
           git pull origin main
           git status
           php artisan migrate --seed
-          php artisan serve
